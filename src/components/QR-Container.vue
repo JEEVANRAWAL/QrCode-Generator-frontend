@@ -5,12 +5,12 @@
       <QRbutton @click="changeButtonStatus('Url')" :class="ActiveButton === 'Url' ? 'buttonActive' : ''" buttonName="Url" Icon="fa-solid fa-globe"/>
       <QRbutton @click="changeButtonStatus('WiFi')" :class="ActiveButton === 'WiFi' ? 'buttonActive' : ''" buttonName="Wi-Fi" Icon="fa-solid fa-wifi"/>
       <QRbutton @click="changeButtonStatus('Email')" :class="ActiveButton === 'Email' ? 'buttonActive' : ''" buttonName="Email" Icon="fa-solid fa-envelope"/>
-      <QRbutton @click="changeButtonStatus('pdf')" :class="ActiveButton === 'pdf' ? 'buttonActive' : ''" buttonName="Pdf" Icon="fa-solid fa-file-pdf"/>
+      <QRbutton @click="changeButtonStatus('Pdf')" :class="ActiveButton === 'Pdf' ? 'buttonActive' : ''" buttonName="Pdf" Icon="fa-solid fa-file-pdf"/>
       <QRbutton @click="changeButtonStatus('Sms')" :class="ActiveButton === 'Sms' ? 'buttonActive' : ''" buttonName="SMS" Icon="fa-solid fa-sms"/>
     </div>
     <div class="item item2">item 2</div>
     <div class="item item3">
-      <InputComponent @emitEnteredData="handleEmit"/>
+      <InputComponent  @emitEnteredData="handleEmit"/>
     </div>
   </div>
 </template>
@@ -20,16 +20,18 @@ import { ref, watch } from 'vue';
 import QRbutton from './button.vue';
 import InputComponent from './InputComponent.vue';
 
-const ActiveButton= ref(null)
+const ActiveButton= ref('Text')
 const InputData= ref('');
+const inputType= ref('');
 
 function handleEmit(data){
   InputData.value= data;
-  // console.log("log from parent: "+ InputData.value);
+  console.log("log from parent: "+ InputData.value);
 }
 
 function changeButtonStatus(ButtonName){
   ActiveButton.value= ActiveButton.value === ButtonName ? null : ButtonName
+  inputType.value= ButtonName;
 }
 
 </script>

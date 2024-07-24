@@ -1,7 +1,14 @@
 <template>
   <div class="inputContainer">
-    <label class="input-label">message*</label>
-    <textarea v-model="EnteredData" name="text" id="text" cols="80" rows="3" placeholder="Enter some text"></textarea>
+    <div v-if="inputType === 'Text'">
+      <label class="input-label">message*</label>
+      <textarea v-model="EnteredData" class="input" id="text" cols="80" rows="3" placeholder="Enter some text"></textarea>
+    </div>
+
+    <div v-if="inputType === 'Url'">
+      <label class="input-label">Website Url*</label>
+      <input v-model="EnteredData" type="text" id="Url" class="input" placeholder="E.g. https://www.jeevanrawal.com.np/">
+    </div>
   </div>
 </template>
 
@@ -9,7 +16,17 @@
 import { ref, watch } from 'vue';
 
 const EnteredData= ref('')
-const emit= defineEmits(['emitEnteredData'])
+const emit= defineEmits(['emitEnteredData']);
+const props= defineProps({
+  inputType:{
+    type: String,
+    default: ()=>('Url')
+  }
+});
+
+watch(()=> props.inputType, ()=>{
+  EnteredData.value='';
+})
 
 watch(EnteredData, (newEnteredData)=>{
   // console.log(newEnteredData);
@@ -22,7 +39,8 @@ watch(EnteredData, (newEnteredData)=>{
     display: block;
 }
 
-#text{
+.input{
+  width: 100%;
   font-family:Arial, Helvetica, sans-serif;
   font-weight: 100;
   font-size: 16px;
@@ -32,7 +50,11 @@ watch(EnteredData, (newEnteredData)=>{
   transition: 0.5s;
 }
 
-#text:hover{
+.input:hover{
   border: 2px solid black;
+}
+
+#Url{
+  height: 50px;
 }
 </style>
