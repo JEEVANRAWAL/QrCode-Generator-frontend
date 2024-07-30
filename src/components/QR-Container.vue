@@ -10,7 +10,7 @@
     </div>
     <div class="item item2">item 2</div>
     <div class="item item3">
-      <InputComponent  @emitEnteredData="handleEmit"/>
+      <InputComponent :inputType="inputType"  @emitEnteredData="handleEmit"/>
     </div>
   </div>
 </template>
@@ -22,11 +22,11 @@ import InputComponent from './InputComponent.vue';
 
 const ActiveButton= ref('Text')
 const InputData= ref('');
-const inputType= ref('');
+const inputType= ref('Text');
 
 function handleEmit(data){
   InputData.value= data;
-  console.log("log from parent: "+ InputData.value);
+  console.log(InputData.value);
 }
 
 function changeButtonStatus(ButtonName){

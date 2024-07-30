@@ -9,6 +9,26 @@
       <label class="input-label">Website Url*</label>
       <input v-model="EnteredData" type="text" id="Url" class="input" placeholder="E.g. https://www.jeevanrawal.com.np/">
     </div>
+
+    <div v-if="inputType === 'WiFi'">
+      <form @submit.prevent="onSubmit">
+        <label for="">Network Name</label>
+        <input v-model="EnteredWifiData.networkName" type="text">
+        
+        <label for="">Network Password</label>
+        <input v-model="EnteredWifiData.networkPassword " type="password">
+
+        <label for="">Type of encryption*</label>
+        <select v-model="EnteredWifiData.encryptionType"  id="">
+          <option value="WPA">WPA</option>
+          <option value="WPA1">WPA1</option>
+          <option value="WPA2">WPA2</option>
+          <option value="WPA3">WPA3</option>
+        </select>
+
+        <input type="submit" value="Generate" @click="handleWifiForm">
+      </form>
+    </div>
   </div>
 </template>
 
@@ -16,6 +36,12 @@
 import { ref, watch } from 'vue';
 
 const EnteredData= ref('')
+const EnteredWifiData= ref({
+  type:'wifi',
+  networkName:'',
+  networkPassword:'',
+  encryptionType:''
+})
 const emit= defineEmits(['emitEnteredData']);
 const props= defineProps({
   inputType:{
@@ -24,13 +50,25 @@ const props= defineProps({
   }
 });
 
+function handleWifiForm(){
+  // console.log(EnteredWifiData.value);
+  emit('emitEnteredData', EnteredWifiData.value)
+}
+
 watch(()=> props.inputType, ()=>{
   EnteredData.value='';
+  
+  //emptying object
+  // for (let key in EnteredWifiData) {
+  //       EnteredWifiData[key]='';
+  // }
 })
 
 watch(EnteredData, (newEnteredData)=>{
   // console.log(newEnteredData);
-  emit('emitEnteredData', newEnteredData)
+  if(newEnteredData !== ''){
+    emit('emitEnteredData', newEnteredData)
+  }
 })
 </script>
 
