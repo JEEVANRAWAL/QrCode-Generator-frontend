@@ -4,11 +4,13 @@
       <QRbutton @click="changeButtonStatus('Text')" :class="ActiveButton === 'Text' ? 'buttonActive' : ''" buttonName="Text" Icon="fa-solid fa-file-lines"/>
       <QRbutton @click="changeButtonStatus('Url')" :class="ActiveButton === 'Url' ? 'buttonActive' : ''" buttonName="Url" Icon="fa-solid fa-globe"/>
       <QRbutton @click="changeButtonStatus('WiFi')" :class="ActiveButton === 'WiFi' ? 'buttonActive' : ''" buttonName="Wi-Fi" Icon="fa-solid fa-wifi"/>
-      <QRbutton @click="changeButtonStatus('Email')" :class="ActiveButton === 'Email' ? 'buttonActive' : ''" buttonName="Email" Icon="fa-solid fa-envelope"/>
-      <QRbutton @click="changeButtonStatus('Pdf')" :class="ActiveButton === 'Pdf' ? 'buttonActive' : ''" buttonName="Pdf" Icon="fa-solid fa-file-pdf"/>
-      <QRbutton @click="changeButtonStatus('Sms')" :class="ActiveButton === 'Sms' ? 'buttonActive' : ''" buttonName="SMS" Icon="fa-solid fa-sms"/>
+      <QRbutton disabled="true" @click="changeButtonStatus('Email')" :class="ActiveButton === 'Email' ? 'buttonActive' : ''" buttonName="Email" Icon="fa-solid fa-envelope"/>
+      <QRbutton disabled="true" @click="changeButtonStatus('Pdf')" :class="ActiveButton === 'Pdf' ? 'buttonActive' : ''" buttonName="Pdf" Icon="fa-solid fa-file-pdf"/>
+      <QRbutton disabled="true" @click="changeButtonStatus('Sms')" :class="ActiveButton === 'Sms' ? 'buttonActive' : ''" buttonName="SMS" Icon="fa-solid fa-sms"/>
     </div>
-    <div class="item item2">item 2</div>
+    <div class="item item2">
+      <QRDisplayerComponent :qrUrl="QrCodeUrl"/>
+    </div>
     <div class="item item3">
       <InputComponent :inputType="inputType"  @emitEnteredData="handleEmit"/>
     </div>
@@ -19,10 +21,13 @@
 import { ref, watch } from 'vue';
 import QRbutton from './button.vue';
 import InputComponent from './InputComponent.vue';
+import QRDisplayerComponent from './QRDisplayer-Component.vue';
+import demoImage2 from "@/assets/img/team-3.jpg";
 
 const ActiveButton= ref('Text')
 const InputData= ref('');
 const inputType= ref('Text');
+const QrCodeUrl= ref(demoImage2);
 
 function handleEmit(data){
   InputData.value= data;
@@ -66,6 +71,10 @@ function changeButtonStatus(ButtonName){
     grid-column-start: 2;
     grid-column-end: 3;
     border-left: 1px solid #c5c3cf;
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+    /* align-items: center; */
 }
 
 .container .item3{

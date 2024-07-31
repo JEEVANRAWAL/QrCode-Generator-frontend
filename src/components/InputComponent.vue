@@ -12,21 +12,29 @@
 
     <div v-if="inputType === 'WiFi'">
       <form @submit.prevent="onSubmit">
-        <label for="">Network Name</label>
-        <input v-model="EnteredWifiData.networkName" type="text">
-        
-        <label for="">Network Password</label>
-        <input v-model="EnteredWifiData.networkPassword " type="password">
-
-        <label for="">Type of encryption*</label>
-        <select v-model="EnteredWifiData.encryptionType"  id="">
-          <option value="WPA">WPA</option>
-          <option value="WPA1">WPA1</option>
-          <option value="WPA2">WPA2</option>
-          <option value="WPA3">WPA3</option>
-        </select>
-
-        <input type="submit" value="Generate" @click="handleWifiForm">
+        <div class="formContainer">
+          <div class="formitems-wrapper">
+            <label class="formLabel" for="">Network Name</label>
+            <input v-model="EnteredWifiData.networkName" type="text">
+          </div>
+          
+          <div class="formitems-wrapper">
+            <label class="formLabel" for="">Network Password</label>
+            <input v-model="EnteredWifiData.networkPassword " type="password">
+          </div>
+  
+          <div class="formitems-wrapper">
+            <label class="formLabel">Type of encryption*</label>
+            <select v-model="EnteredWifiData.encryptionType" name="encryptionType">
+              <option value="WPA">WPA</option>
+              <option value="WPA1">WPA1</option>
+              <option value="WPA2">WPA2</option>
+              <option value="WPA3">WPA3</option>
+            </select>
+          </div>
+  
+          <input id="GenerateButton" type="submit" value="Generate QR Code" @click="handleWifiForm">
+        </div>
       </form>
     </div>
   </div>
@@ -94,5 +102,64 @@ watch(EnteredData, (newEnteredData)=>{
 
 #Url{
   height: 50px;
+}
+
+.formContainer{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 15px;
+  font-family:Arial, Helvetica, sans-serif;
+
+  /* justify-content: space-between; */
+}
+
+.formitems-wrapper{
+  margin-left: 15px;
+  margin-bottom: 30px;
+}
+
+.formitems-wrapper input{
+  width: 350px;
+  min-width: 50px;
+  padding: 15px;
+  border-radius:4px;
+  border: 2px solid #dbdada;
+  height: 40px;
+  transition: 0.5s;
+}
+
+.formitems-wrapper select{
+  width: 100px;
+  height: 40px;
+  padding-left: 15px;
+  border-radius:4px;
+  border: 2px solid #dbdada;
+  transition: 0.5s;
+}
+
+.formitems-wrapper input:hover, .formitems-wrapper select:hover{
+  border: 2px solid black;
+}
+
+.formLabel{
+  display: block;
+  
+}
+
+#GenerateButton{
+  height: 50px;
+  margin-left: 63px;
+  margin-top: 25px;
+  padding: 10px;
+  border-radius:10px;
+  border: none;
+  background-color: rgb(87, 87, 255);
+  color: aliceblue;
+  transition: 0.5s;
+}
+
+#GenerateButton:hover{
+  background-color: rgb(64, 64, 191);
 }
 </style>
