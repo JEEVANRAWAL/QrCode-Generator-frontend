@@ -9,7 +9,8 @@
       <QRbutton disabled="true" @click="changeButtonStatus('Sms')" :class="ActiveButton === 'Sms' ? 'buttonActive' : ''" buttonName="SMS" Icon="fa-solid fa-sms"/>
     </div>
     <div class="item item2">
-      <QRDisplayerComponent :qrUrl="QrCodeUrl"/>
+      <QRDisplayerComponent :qrUrl="QrCodeUrl" :key="QrCodeUrl"/>
+      <!-- <a :href="QrCodeUrl" download="qr.png">Download QR</a> -->
     </div>
     <div class="item item3">
       <InputComponent :inputType="inputType"  @emitEnteredData="handleEmit"/>
@@ -22,17 +23,75 @@ import { ref, watch } from 'vue';
 import QRbutton from './button.vue';
 import InputComponent from './InputComponent.vue';
 import QRDisplayerComponent from './QRDisplayer-Component.vue';
-import demoImage2 from "@/assets/img/team-3.jpg";
 
 const ActiveButton= ref('Text')
-const InputData= ref('');
+const InputedData= ref('');
 const inputType= ref('Text');
-const QrCodeUrl= ref(demoImage2);
+const QrCodeUrl= ref('');
+
+//function to handle api call
+async function callApi(apiEndPoint, Method, Data){
+  try{
+    const response= await fetch(apiEndPoint, {
+      method: Method,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+      data: Data
+      })
+    });
+
+    if(!response.ok){
+      throw new Error(`Response Status: ${response.status}`);
+    } else{
+      const json= await response.json();
+      const imageUrl= json.qr_url;
+      const timestamp = new Date().getTime();
+      QrCodeUrl.value = imageUrl + "?" + timestamp;
+    };
+
+  }catch(error){
+    console.log(error.message);
+  }
+}
+
 
 function handleEmit(data){
-  InputData.value= data;
-  console.log(InputData.value);
+  InputedData.value= data;
+
+  // Determining whether the variable is object or not
+  if(InputedData.value instanceof Object){
+
+    // checking the value of type property to match provided "cases".
+    switch (InputedData.value.type) {
+      case 'wifi':
+        console.log("This object has type: wifi");
+        // formatting data to a specific string data format for wifi network
+        let data= `WIFI:S:${InputedData.value.networkName};T:${InputedData.value.encryptionType};P:${InputedData.value.networkPassword};;`
+        callApi('http://127.0.0.1:5000/generate-QrCode', 'POST', data)
+        break;
+      case 'email':
+        console.log("This is object email");
+        break;
+      case 'pdf':
+        // Handle pdf case
+        break;
+      case 'sms':
+        // Handle sms case
+        break;
+      case 'vcard':
+        // Handle vcard case
+        break;
+      default:
+        console.log("Unknown Type");
+        break;
+    }
+  } else{
+    callApi('http://127.0.0.1:5000/generate-QrCode', 'POST', InputedData.value);
+  }
 }
+
 
 function changeButtonStatus(ButtonName){
   ActiveButton.value= ActiveButton.value === ButtonName ? null : ButtonName
