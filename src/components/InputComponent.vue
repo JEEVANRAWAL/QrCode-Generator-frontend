@@ -27,9 +27,9 @@
             <label class="formLabel">Type of encryption*</label>
             <select v-model="EnteredWifiData.encryptionType" name="encryptionType">
               <option value="WPA">WPA</option>
-              <option value="WPA1">WPA1</option>
-              <option value="WPA2">WPA2</option>
-              <option value="WPA3">WPA3</option>
+              <option value="WPA1">WEP</option>
+              <option value="WPA2">WPA2-EAP</option>
+              <option value="WPA3">nopass</option>
             </select>
           </div>
   
