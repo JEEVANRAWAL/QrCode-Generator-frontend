@@ -9,8 +9,8 @@
       <QRbutton disabled="true" @click="changeButtonStatus('Sms')" :class="ActiveButton === 'Sms' ? 'buttonActive' : ''" buttonName="SMS" Icon="fa-solid fa-sms"/>
     </div>
     <div class="item item2">
-      <QRDisplayerComponent :qrUrl="QrCodeUrl" :key="QrCodeUrl"/>
-      <!-- <a :href="QrCodeUrl" download="qr.png">Download QR</a> -->
+      <QRDisplayerComponent :qrUrl="OriginalQrCodeImage_File" :key="OriginalQrCodeImage_File"/>
+      <a id="downloadButton" :href="OriginalQrCodeImage_File" download="qr.png"><font-awesome-icon icon="fa-solid fa-download" style="margin-right: 5px;"/> Download QR</a>
     </div>
     <div class="item item3">
       <InputComponent :inputType="inputType"  @emitEnteredData="handleEmit"/>
@@ -27,7 +27,7 @@ import QRDisplayerComponent from './QRDisplayer-Component.vue';
 const ActiveButton= ref('Text')
 const InputedData= ref('');
 const inputType= ref('Text');
-const QrCodeUrl= ref('');
+const OriginalQrCodeImage_File=ref();
 
 //function to handle api call
 async function callApi(apiEndPoint, Method, Data){
@@ -47,13 +47,28 @@ async function callApi(apiEndPoint, Method, Data){
     } else{
       const json= await response.json();
       const imageUrl= json.qr_url;
-      const timestamp = new Date().getTime();
-      QrCodeUrl.value = imageUrl + "?" + timestamp;
+      // call image url endpoint & convert its response (which is image) to blob object.
+      // blob(binary large object) object and file object work similar 
+      const res= await fetch(imageUrl);
+      const blob= await res.blob();
+      //const file = new File([blob], 'image', {type: blob.type});
+      readFile(blob)
     };
 
   }catch(error){
     console.log(error.message);
   }
+}
+
+// read file
+function readFile(input){
+  const fileread= new FileReader();
+  fileread.readAsDataURL(input);
+
+  fileread.addEventListener('load', ()=>{
+    const res= fileread.result;
+    OriginalQrCodeImage_File.value=res;
+  })
 }
 
 
@@ -103,13 +118,14 @@ function changeButtonStatus(ButtonName){
 <style scoped>
 .container{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
     grid-template-rows: repeat(2, minmax(100px, auto));
     width: 100%;
     border: none;
     border-radius: 10px;
     padding: 0;
     box-shadow: 0px 0px 200px -50px green, 0 -3em 200px mediumpurple;
+    margin-bottom: 250px;
     /* box-shadow: 0px 0px 200px -100px green */
 }
 
@@ -131,7 +147,9 @@ function changeButtonStatus(ButtonName){
     grid-column-end: 3;
     border-left: 1px solid #c5c3cf;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding-top: 30px;
     /* align-items: center; */
 }
@@ -143,5 +161,49 @@ function changeButtonStatus(ButtonName){
 
 .buttonActive{
     border: 2px solid blue;
+}
+
+#downloadButton{
+  display: block;
+  height: 50px;
+  padding: 11px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  border: none;
+  border-radius:15px;
+  color: aliceblue;
+  cursor: pointer;
+  background-color: rgb(87, 87, 255);
+  transition: 0.5s;
+}
+
+#downloadButton:hover{
+  background-color: rgb(64, 64, 191);
+}
+
+@media only screen and (max-width: 750px) {
+  .container {
+        grid-template-columns: 1fr; /* Make columns into rows */
+        grid-template-rows: auto; /* Adjust row sizing */
+    }
+
+    .container .item1 {
+        border-radius: 10px 10px 0 0; /* Adjust border radius */
+    }
+
+    .container .item2 {
+        grid-row-start: 3;
+        grid-row-end: 4;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        border-left: none;
+        border-top: 1px solid #c5c3cf;
+    }
+
+    .container .item3 {
+        grid-row-start: 2;
+        grid-row-end: 3;
+        padding-bottom: 50px;
+    }
 }
 </style>
