@@ -15,9 +15,9 @@ const props = defineProps({
     color: String,
     label: String,
     default: () => ({
-      route: "https://www.creative-tim.com/product/vue-material-kit",
+      route: "#",
       color: "bg-gradient-success",
-      label: "Free Download"
+      label: "Download"
     })
   },
   transparent: {
@@ -244,8 +244,9 @@ watch(
           </li>
           <li class="nav-item dropdown dropdown-hover mx-2">
             <a
-              href="https://www.github.com/creativetimofficial/vue-material-kit"
+              href="https://github.com/JEEVANRAWAL"
               class="nav-link d-flex cursor-pointer align-items-center"
+              target="_blank"
             >
               <svg
                 width="20px"

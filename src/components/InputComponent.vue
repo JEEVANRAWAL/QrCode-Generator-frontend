@@ -162,4 +162,12 @@ watch(EnteredData, (newEnteredData)=>{
 #GenerateButton:hover{
   background-color: rgb(64, 64, 191);
 }
+
+@media only screen and (max-width: 750px) {
+/* .formContainer{
+  width: 40%;
+  flex-direction: column;
+} */
+}
+
 </style>

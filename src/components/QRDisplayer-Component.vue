@@ -22,11 +22,11 @@ const QRCodeUrl= ref(props.qrUrl);
 <style scoped>
 .imageBox{
     position: relative;
-    width: 250px;
+    width: 290px;
     height: 280px;
     border: 2px solid #dbdada;
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .imageBox img{
